@@ -10,6 +10,12 @@ import { AddDataComponent } from './dashboard/add-data/add-data.component';
 import { HeaderComponent } from './header/header.component';
 import { ButtonComponent } from './dashboard/button/button.component';
 import { PaginationPipe } from './dashboard/data/pagination.pipe';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatButtonModule } from '@angular/material/button';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -27,6 +33,12 @@ import { PaginationPipe } from './dashboard/data/pagination.pipe';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    MatToolbarModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatButtonModule,
+    BrowserAnimationsModule,
+    MatSnackBarModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { Kindergarden } from './interfaces/Kindergarden';
 import { StoreService } from './store.service';
 import { Child, ChildResponse } from './interfaces/Child';
-import { CHILDREN_PER_PAGE } from './constants';
 
 @Injectable({
   providedIn: 'root',
@@ -22,10 +21,10 @@ export class BackendService {
       });
   }
 
-  public getChildren(page: number) {
+  public getChildren(page: number, size: number) {
     this.http
       .get<ChildResponse[]>(
-        `http://localhost:5000/childs?_expand=kindergarden&_page=${page}&_limit=${CHILDREN_PER_PAGE}`,
+        `http://localhost:5000/childs?_expand=kindergarden&_page=${page}&_limit=${size}`,
         { observe: 'response' }
       )
       .subscribe(data => {
@@ -36,15 +35,15 @@ export class BackendService {
       });
   }
 
-  public addChildData(child: Child, page: number) {
+  public addChildData(child: Child, page: number, size: number) {
     this.http.post('http://localhost:5000/childs', child).subscribe(_ => {
-      this.getChildren(page);
+      this.getChildren(page, size);
     });
   }
 
-  public deleteChildData(childId: string, page: number) {
+  public deleteChildData(childId: string, page: number, size: number) {
     this.http.delete(`http://localhost:5000/childs/${childId}`).subscribe(_ => {
-      this.getChildren(page);
+      this.getChildren(page, size);
     });
   }
 }
