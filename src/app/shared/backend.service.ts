@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Kindergarden } from './interfaces/Kindergarden';
 import { StoreService } from './store.service';
 import { Child, ChildResponse } from './interfaces/Child';
+import { SpinnerService } from './spinner.service';
 
 @Injectable({
   providedIn: 'root',
@@ -10,40 +11,64 @@ import { Child, ChildResponse } from './interfaces/Child';
 export class BackendService {
   constructor(
     private http: HttpClient,
-    private storeService: StoreService
+    private storeService: StoreService,
+    private spinnerService: SpinnerService
   ) {}
 
   public getKindergardens() {
+    this.spinnerService.show();
     this.http
       .get<Kindergarden[]>('http://localhost:5000/kindergardens')
-      .subscribe(data => {
-        this.storeService.kindergardens = data;
+      .subscribe({
+        next: data => {
+          this.storeService.kindergardens = data;
+        },
+        complete: () => {
+          this.spinnerService.hide();
+        },
       });
   }
 
   public getChildren(page: number, size: number) {
+    this.spinnerService.show();
     this.http
       .get<ChildResponse[]>(
         `http://localhost:5000/childs?_expand=kindergarden&_page=${page}&_limit=${size}`,
         { observe: 'response' }
       )
-      .subscribe(data => {
-        this.storeService.children = data.body!;
-        this.storeService.childrenTotalCount = Number(
-          data.headers.get('X-Total-Count')
-        );
+      .subscribe({
+        next: data => {
+          this.storeService.children = data.body!;
+          this.storeService.childrenTotalCount = Number(
+            data.headers.get('X-Total-Count')
+          );
+        },
+        complete: () => {
+          this.spinnerService.hide();
+        },
       });
   }
 
   public addChildData(child: Child, page: number, size: number) {
-    this.http.post('http://localhost:5000/childs', child).subscribe(_ => {
-      this.getChildren(page, size);
+    this.spinnerService.show();
+    this.http.post('http://localhost:5000/childs', child).subscribe({
+      next: () => {
+        this.getChildren(page, size);
+      },
+      complete: () => {
+        this.spinnerService.hide();
+      },
     });
   }
 
   public deleteChildData(childId: string, page: number, size: number) {
-    this.http.delete(`http://localhost:5000/childs/${childId}`).subscribe(_ => {
-      this.getChildren(page, size);
+    this.http.delete(`http://localhost:5000/childs/${childId}`).subscribe({
+      next: () => {
+        this.getChildren(page, size);
+      },
+      complete: () => {
+        this.spinnerService.hide();
+      },
     });
   }
 }

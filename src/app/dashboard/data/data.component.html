@@ -48,6 +48,7 @@
 </mat-table>
 
 <mat-paginator
+  [disabled]="spinnerService.isLoading$ | async"
   [length]="this.storeService.childrenTotalCount"
   [pageSize]="this.pageSize"
   [pageSizeOptions]="[2, 5, 10]"

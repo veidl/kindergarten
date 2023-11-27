@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { BackendService } from 'src/app/shared/backend.service';
 import { StoreService } from 'src/app/shared/store.service';
 import { PageEvent } from '@angular/material/paginator';
+import { SpinnerService } from '../../shared/spinner.service';
 
 @Component({
   selector: 'app-data',
@@ -11,7 +12,8 @@ import { PageEvent } from '@angular/material/paginator';
 export class DataComponent implements OnInit {
   constructor(
     public storeService: StoreService,
-    private backendService: BackendService
+    private backendService: BackendService,
+    public spinnerService: SpinnerService
   ) {}
 
   @Input() pageSize!: number;
