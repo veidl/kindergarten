@@ -3,7 +3,8 @@ import { Injectable } from '@angular/core';
 import { Kindergarden } from './interfaces/Kindergarden';
 import { StoreService } from './store.service';
 import { Child, ChildResponse } from './interfaces/Child';
-import { CHILDREN_PER_PAGE } from './constants';
+import { SpinnerService } from './spinner.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root',
@@ -11,40 +12,71 @@ import { CHILDREN_PER_PAGE } from './constants';
 export class BackendService {
   constructor(
     private http: HttpClient,
-    private storeService: StoreService
+    private storeService: StoreService,
+    private spinnerService: SpinnerService,
+    private snackBar: MatSnackBar
   ) {}
 
   public getKindergardens() {
+    this.spinnerService.show();
     this.http
       .get<Kindergarden[]>('http://localhost:5000/kindergardens')
-      .subscribe(data => {
-        this.storeService.kindergardens = data;
+      .subscribe({
+        next: data => {
+          this.storeService.kindergardens = data;
+        },
+        complete: () => {
+          this.spinnerService.hide();
+        },
       });
   }
 
-  public getChildren(page: number) {
+  public getChildren(page: number, size: number) {
+    this.spinnerService.show();
     this.http
       .get<ChildResponse[]>(
-        `http://localhost:5000/childs?_expand=kindergarden&_page=${page}&_limit=${CHILDREN_PER_PAGE}`,
+        `http://localhost:5000/childs?_expand=kindergarden&_page=${page}&_limit=${size}`,
         { observe: 'response' }
       )
-      .subscribe(data => {
-        this.storeService.children = data.body!;
-        this.storeService.childrenTotalCount = Number(
-          data.headers.get('X-Total-Count')
-        );
+      .subscribe({
+        next: data => {
+          this.storeService.children = data.body!;
+          this.storeService.childrenTotalCount = Number(
+            data.headers.get('X-Total-Count')
+          );
+        },
+        complete: () => {
+          this.spinnerService.hide();
+        },
       });
   }
 
-  public addChildData(child: Child, page: number) {
-    this.http.post('http://localhost:5000/childs', child).subscribe(_ => {
-      this.getChildren(page);
+  public addChildData(child: Child, page: number, size: number) {
+    this.spinnerService.show();
+    this.http.post('http://localhost:5000/childs', child).subscribe({
+      next: () => {
+        this.snackBar.open('Kind wurde registriert.', 'OK', {
+          duration: 2000,
+          horizontalPosition: 'right',
+          verticalPosition: 'bottom',
+        });
+        this.getChildren(page, size);
+      },
+      complete: () => {
+        this.spinnerService.hide();
+      },
     });
   }
 
-  public deleteChildData(childId: string, page: number) {
-    this.http.delete(`http://localhost:5000/childs/${childId}`).subscribe(_ => {
-      this.getChildren(page);
+  public deleteChildData(childId: string, page: number, size: number) {
+    this.spinnerService.show();
+    this.http.delete(`http://localhost:5000/childs/${childId}`).subscribe({
+      next: () => {
+        this.getChildren(page, size);
+      },
+      complete: () => {
+        this.spinnerService.hide();
+      },
     });
   }
 }

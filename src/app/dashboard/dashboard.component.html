@@ -1,8 +1,22 @@
+<div class="container-fluid">
+  <div style="text-align: center">
+    <img
+      src="assets/images/kindergarden.jpg"
+      width="500"
+      alt="Kindergarten logo" />
+  </div>
+</div>
+
 <app-data
   [currentPage]="currentPage"
-  (selectPageEvent)="receiveMessage($event)"></app-data>
+  [pageSize]="pageSize"
+  (selectPageEvent)="receiveMessage($event)"
+  (selectPageSizeEvent)="receivePageSize($event)"></app-data>
 <br />
 <app-button
   [showAddData]="showAddData"
   (toggleButtonClickEvent)="toggleButtonClicked($event)"></app-button>
-<app-add-data *ngIf="showAddData" [currentPage]="currentPage"></app-add-data>
+<app-add-data
+  *ngIf="showAddData"
+  [currentPage]="currentPage"
+  [pageSize]="pageSize"></app-add-data>

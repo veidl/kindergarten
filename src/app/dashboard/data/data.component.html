@@ -1,42 +1,59 @@
-<table>
-  <tr>
-    <th>Name</th>
-    <th>Kindergarden</th>
-    <th>Adresse</th>
-    <th>Alter</th>
-    <th>Geburtsdatum</th>
-    <th></th>
-  </tr>
-  <tr *ngFor="let child of storeService.children">
-    <td>{{ child.name }}</td>
-    <td>{{ child.kindergarden.name }}</td>
-    <td>{{ child.kindergarden.address }}</td>
-    <td>{{ getAge(child.birthDate) }}</td>
-    <td>{{ child.birthDate | date: 'longDate' }}</td>
-    <button (click)="cancelRegistration(child.id)">Kind abmelden</button>
-  </tr>
-</table>
+<mat-table [dataSource]="storeService.children" class="mat-elevation-z8">
+  <!-- Name Column -->
+  <ng-container matColumnDef="name">
+    <mat-header-cell *matHeaderCellDef> Name</mat-header-cell>
+    <mat-cell *matCellDef="let child"> {{ child.name }} </mat-cell>
+  </ng-container>
 
-<button
-  [ngClass]="page === currentPage ? 'active' : ''"
-  (click)="selectPage(page)"
-  type="button"
-  *ngFor="let page of returnAllPages() | pagination">
-  {{ page }}
-</button>
+  <!-- Kindergarden Column -->
+  <ng-container matColumnDef="kindergarden">
+    <mat-header-cell *matHeaderCellDef> Kindergarden</mat-header-cell>
+    <mat-cell *matCellDef="let child"> {{ child.kindergarden.name }} </mat-cell>
+  </ng-container>
 
-<!-- <div class="container">
-    <div class="row">
-        <div class="col-4 border-green">
-            <p>Row 1 Spalte 1</p>
-        </div>
-        <div class="col-4 border-green">
-            <p>Row 1 Spalte 2</p>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col border-green">
-            Row 2 Spalte 1
-        </div>
-    </div>
-</div> -->
+  <!-- Address Column -->
+  <ng-container matColumnDef="address">
+    <mat-header-cell *matHeaderCellDef> Adresse</mat-header-cell>
+    <mat-cell *matCellDef="let child">
+      {{ child.kindergarden.address }}
+    </mat-cell>
+  </ng-container>
+
+  <!-- Age Column -->
+  <ng-container matColumnDef="age">
+    <mat-header-cell *matHeaderCellDef> Alter</mat-header-cell>
+    <mat-cell *matCellDef="let child"> {{ getAge(child.birthDate) }} </mat-cell>
+  </ng-container>
+
+  <!-- Birthdate Column -->
+  <ng-container matColumnDef="birthdate">
+    <mat-header-cell *matHeaderCellDef> Geburtsdatum</mat-header-cell>
+    <mat-cell *matCellDef="let child">
+      {{ child.birthDate | date: 'longDate' }}
+    </mat-cell>
+  </ng-container>
+
+  <!-- Unregister Button Column -->
+  <ng-container matColumnDef="unregister">
+    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+    <mat-cell *matCellDef="let child">
+      <button
+        [disabled]="spinnerService.isLoading$ | async"
+        mat-button
+        (click)="cancelRegistration(child.id)">
+        Kind abmelden
+      </button>
+    </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+</mat-table>
+
+<mat-paginator
+  [disabled]="spinnerService.isLoading$ | async"
+  [length]="this.storeService.childrenTotalCount"
+  [pageSize]="this.pageSize"
+  [pageSizeOptions]="[5, 10, 15]"
+  (page)="selectPageV2($event)">
+</mat-paginator>
