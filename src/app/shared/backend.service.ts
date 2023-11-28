@@ -4,6 +4,7 @@ import { Kindergarden } from './interfaces/Kindergarden';
 import { StoreService } from './store.service';
 import { Child, ChildResponse } from './interfaces/Child';
 import { SpinnerService } from './spinner.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +13,8 @@ export class BackendService {
   constructor(
     private http: HttpClient,
     private storeService: StoreService,
-    private spinnerService: SpinnerService
+    private spinnerService: SpinnerService,
+    private snackBar: MatSnackBar
   ) {}
 
   public getKindergardens() {
@@ -53,6 +55,11 @@ export class BackendService {
     this.spinnerService.show();
     this.http.post('http://localhost:5000/childs', child).subscribe({
       next: () => {
+        this.snackBar.open('Kind wurde registriert.', 'OK', {
+          duration: 2000,
+          horizontalPosition: 'right',
+          verticalPosition: 'bottom',
+        });
         this.getChildren(page, size);
       },
       complete: () => {
@@ -62,6 +69,7 @@ export class BackendService {
   }
 
   public deleteChildData(childId: string, page: number, size: number) {
+    this.spinnerService.show();
     this.http.delete(`http://localhost:5000/childs/${childId}`).subscribe({
       next: () => {
         this.getChildren(page, size);

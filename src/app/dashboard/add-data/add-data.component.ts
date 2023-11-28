@@ -3,6 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { BackendService } from 'src/app/shared/backend.service';
 import { StoreService } from 'src/app/shared/store.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { SpinnerService } from '../../shared/spinner.service';
 
 @Component({
   selector: 'app-add-data',
@@ -14,7 +15,7 @@ export class AddDataComponent implements OnInit {
     private formbuilder: FormBuilder,
     public storeService: StoreService,
     public backendService: BackendService,
-    private snackBar: MatSnackBar
+    public spinnerService: SpinnerService
   ) {}
 
   public addChildForm: any;
@@ -32,15 +33,17 @@ export class AddDataComponent implements OnInit {
   onSubmit() {
     if (this.addChildForm.valid) {
       console.log(this.currentPage);
+      console.log(this.pageSize);
       this.backendService.addChildData(
         this.addChildForm.value,
         this.currentPage,
         this.pageSize
       );
-      this.snackBar.open('Kind wurde registriert.', 'OK', {
-        duration: 2000,
-        horizontalPosition: 'right',
-        verticalPosition: 'bottom',
+      this.addChildForm.reset();
+      Object.keys(this.addChildForm.controls).forEach(key => {
+        this.addChildForm.get(key).setErrors(null);
+        this.addChildForm.get(key).markAsPristine();
+        this.addChildForm.get(key).markAsUntouched();
       });
     }
   }

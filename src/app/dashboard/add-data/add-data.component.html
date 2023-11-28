@@ -1,17 +1,45 @@
-<form [formGroup]="addChildForm" (ngSubmit)="onSubmit()">
-  <h2>Ihr Kind anmelden!</h2>
-  <input placeholder="Name" type="input" formControlName="name" /><br />
-  <input
-    placeholder="Geburtsdatum"
-    type="date"
-    formControlName="birthDate" /><br />
-  <select formControlName="kindergardenId">
-    <option value="" disabled>Bitte auswählen</option>
-    <option
-      *ngFor="let kindergarden of storeService.kindergardens"
-      [ngValue]="kindergarden.id">
-      {{ kindergarden.name }}, {{ kindergarden.address }}
-    </option>
-  </select>
-  <button type="submit">Erfassen</button>
-</form>
+<div class="login-container">
+  <mat-card class="login-card">
+    <mat-card-title>Ihr Kind anmelden!</mat-card-title>
+    <mat-card-content>
+      <form [formGroup]="addChildForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="fill">
+          <mat-label>Name</mat-label>
+          <input matInput placeholder="Name" formControlName="name" />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Geburtsdatum</mat-label>
+          <input
+            matInput
+            [matDatepicker]="picker"
+            formControlName="birthDate" />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Kindergarten</mat-label>
+          <mat-select formControlName="kindergardenId">
+            <mat-option value="" disabled>Bitte auswählen</mat-option>
+            <mat-option
+              *ngFor="let kinderGarden of storeService.kindergardens"
+              [value]="kinderGarden.id">
+              {{ kinderGarden.name }}, {{ kinderGarden.address }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="spinnerService.isLoading$ | async">
+          Erfassen
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

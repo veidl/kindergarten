@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
 })
 export class DashboardComponent {
   public currentPage: number = 1;
-  public pageSize: number = 2;
+  public pageSize: number = 5;
   public showAddData = true;
 
   receiveMessage(newPageCount: number) {
