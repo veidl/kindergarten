@@ -6,6 +6,9 @@
         <mat-form-field appearance="fill">
           <mat-label>Name</mat-label>
           <input matInput placeholder="Name" formControlName="name" />
+          <mat-error *ngIf="isFieldInvalid('name')">
+            Name ist nicht gültig
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="fill">
@@ -14,6 +17,9 @@
             matInput
             [matDatepicker]="picker"
             formControlName="birthDate" />
+          <mat-error *ngIf="isFieldInvalid('birthDate')"
+            >Geburtsdatum nicht gültig</mat-error
+          >
           <mat-datepicker-toggle
             matSuffix
             [for]="picker"></mat-datepicker-toggle>
@@ -30,6 +36,9 @@
               {{ kinderGarden.name }}, {{ kinderGarden.address }}
             </mat-option>
           </mat-select>
+          <mat-error *ngIf="isFieldInvalid('kindergardenId')"
+            >Auswahl nicht korrekt</mat-error
+          >
         </mat-form-field>
 
         <button
