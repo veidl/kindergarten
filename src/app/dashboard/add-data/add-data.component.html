@@ -6,8 +6,14 @@
         <mat-form-field appearance="fill">
           <mat-label>Name</mat-label>
           <input matInput placeholder="Name" formControlName="name" />
-          <mat-error *ngIf="isFieldInvalid('name')">
-            Name ist nicht gültig
+          <mat-error *ngIf="addChildForm.get('name').errors?.required">
+            Name ist erforderlich
+          </mat-error>
+          <mat-error *ngIf="addChildForm.get('name').errors?.minlength">
+            Der Name muss mindestens 3 Zeichen lang sein
+          </mat-error>
+          <mat-error *ngIf="addChildForm.get('name').errors?.maxlength">
+            Der Name darf nicht länger als 20 Zeichen sein
           </mat-error>
         </mat-form-field>
 
@@ -17,9 +23,15 @@
             matInput
             [matDatepicker]="picker"
             formControlName="birthDate" />
-          <mat-error *ngIf="isFieldInvalid('birthDate')"
-            >Geburtsdatum nicht gültig</mat-error
-          >
+          <mat-error
+            *ngIf="addChildForm.get('birthDate').errors?.dateBeforeToday">
+            Geburtsdatum ist ind der Zukunft
+          </mat-error>
+
+          <mat-error
+            *ngIf="addChildForm.get('birthDate').errors?.noDateSelected">
+            Geburtsdatum ist erforderlich
+          </mat-error>
           <mat-datepicker-toggle
             matSuffix
             [for]="picker"></mat-datepicker-toggle>
@@ -36,17 +48,20 @@
               {{ kinderGarden.name }}, {{ kinderGarden.address }}
             </mat-option>
           </mat-select>
-          <mat-error *ngIf="isFieldInvalid('kindergardenId')"
-            >Auswahl nicht korrekt</mat-error
-          >
+          <mat-error
+            *ngIf="addChildForm.get('kindergardenId').errors?.required">
+            Bitte wählen Sie einen Kindergarten aus
+          </mat-error>
         </mat-form-field>
 
         <button
           mat-raised-button
           color="primary"
           type="submit"
-          [disabled]="spinnerService.isLoading$ | async">
-          Erfassen
+          [disabled]="
+            !addChildForm.valid || (spinnerService.isLoading$ | async)
+          ">
+          > Erfassen
         </button>
       </form>
     </mat-card-content>
