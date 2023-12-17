@@ -1,5 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { BackendService } from 'src/app/shared/backend.service';
 import { StoreService } from 'src/app/shared/store.service';
 import { SpinnerService } from '../../shared/spinner.service';
@@ -23,32 +28,43 @@ export class AddDataComponent implements OnInit {
 
   ngOnInit(): void {
     this.addChildForm = this.formbuilder.group({
-      name: ['', [Validators.required]],
+      name: [
+        '',
+        [
+          Validators.minLength(3),
+          Validators.maxLength(20),
+          Validators.required,
+        ],
+      ],
       kindergardenId: ['', Validators.required],
-      birthDate: [null, Validators.required],
+      birthDate: [null, this.beforeTodayValidator()],
     });
   }
 
-  isFieldInvalid(field: string) {
-    const formField = this.addChildForm.get(field);
-    return formField.invalid && (formField.dirty || formField.touched);
+  private beforeTodayValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // Reset time part for today's date
+      const selectedDate = new Date(control.value);
+
+      if (control.value === null) {
+        return { noDateSelected: true };
+      }
+      if (selectedDate >= today) {
+        return { dateBeforeToday: true };
+      }
+      return null;
+    };
   }
 
   onSubmit() {
     if (this.addChildForm.valid) {
-      console.log(this.currentPage);
-      console.log(this.pageSize);
       this.backendService.addChildData(
         this.addChildForm.value,
         this.currentPage,
         this.pageSize
       );
       this.addChildForm.reset();
-
-      Object.keys(this.addChildForm.controls).forEach(key => {
-        const control = this.addChildForm.get(key);
-        control.setErrors(null);
-      });
     }
   }
 }
