@@ -1,21 +1,31 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { BackendService } from 'src/app/shared/backend.service';
 import { StoreService } from 'src/app/shared/store.service';
 import { PageEvent } from '@angular/material/paginator';
 import { SpinnerService } from '../../shared/spinner.service';
+import { MatSort, Sort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-data',
   templateUrl: './data.component.html',
   styleUrls: ['./data.component.scss'],
 })
-export class DataComponent implements OnInit {
+export class DataComponent implements OnInit, AfterViewInit {
   constructor(
     public storeService: StoreService,
     private backendService: BackendService,
     public spinnerService: SpinnerService
   ) {}
 
+  @ViewChild(MatSort) sort!: MatSort;
   @Input() pageSize!: number;
   @Input() currentPage!: number;
   @Output() selectPageEvent = new EventEmitter<number>();
@@ -26,11 +36,23 @@ export class DataComponent implements OnInit {
     'address',
     'age',
     'birthdate',
+    'registerDate',
     'unregister',
   ];
 
   ngOnInit(): void {
+    console.log(this.currentPage);
     this.backendService.getChildren(this.currentPage, this.pageSize);
+  }
+
+  ngAfterViewInit() {
+    this.sort.sortChange.subscribe((sortState: Sort) => {
+      this.backendService.getChildren(
+        this.currentPage,
+        this.pageSize,
+        `${sortState.active},${sortState.direction}`
+      );
+    });
   }
 
   getAge(birthDate: string) {

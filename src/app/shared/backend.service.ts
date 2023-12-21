@@ -31,11 +31,14 @@ export class BackendService {
       });
   }
 
-  public getChildren(page: number, size: number) {
+  public getChildren(page: number, size: number, sort?: string) {
     this.spinnerService.show();
+    let sortParam = sort
+      ? `&_sort=${sort.split(',')[0]}&_order=${sort.split(',')[1]}`
+      : '';
     this.http
       .get<ChildResponse[]>(
-        `http://localhost:5000/childs?_expand=kindergarden&_page=${page}&_limit=${size}`,
+        `http://localhost:5000/childs?_expand=kindergarden&_page=${page}&_limit=${size}${sortParam}`,
         { observe: 'response' }
       )
       .subscribe({
@@ -53,6 +56,7 @@ export class BackendService {
 
   public addChildData(child: Child, page: number, size: number) {
     this.spinnerService.show();
+    child.registerDate = new Date().toISOString();
     this.http.post('http://localhost:5000/childs', child).subscribe({
       next: () => {
         this.snackBar.open('Kind wurde registriert.', 'OK', {

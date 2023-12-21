@@ -23,6 +23,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatDatepickerModule,
     MatSelectModule,
     MatNativeDateModule,
+    MatSortModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

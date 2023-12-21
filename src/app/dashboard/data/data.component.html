@@ -1,19 +1,24 @@
-<mat-table [dataSource]="storeService.children" class="mat-elevation-z8">
+<mat-table
+  [dataSource]="storeService.children"
+  class="mat-elevation-z8"
+  matSort>
   <!-- Name Column -->
   <ng-container matColumnDef="name">
-    <mat-header-cell *matHeaderCellDef> Name</mat-header-cell>
-    <mat-cell *matCellDef="let child"> {{ child.name }} </mat-cell>
+    <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+    <mat-cell *matCellDef="let child"> {{ child.name }}</mat-cell>
   </ng-container>
 
   <!-- Kindergarden Column -->
   <ng-container matColumnDef="kindergarden">
-    <mat-header-cell *matHeaderCellDef> Kindergarden</mat-header-cell>
-    <mat-cell *matCellDef="let child"> {{ child.kindergarden.name }} </mat-cell>
+    <mat-header-cell *matHeaderCellDef mat-sort-header
+      >Kindergarden</mat-header-cell
+    >
+    <mat-cell *matCellDef="let child"> {{ child.kindergarden.name }}</mat-cell>
   </ng-container>
 
   <!-- Address Column -->
   <ng-container matColumnDef="address">
-    <mat-header-cell *matHeaderCellDef> Adresse</mat-header-cell>
+    <mat-header-cell *matHeaderCellDef>Adresse</mat-header-cell>
     <mat-cell *matCellDef="let child">
       {{ child.kindergarden.address }}
     </mat-cell>
@@ -22,7 +27,7 @@
   <!-- Age Column -->
   <ng-container matColumnDef="age">
     <mat-header-cell *matHeaderCellDef> Alter</mat-header-cell>
-    <mat-cell *matCellDef="let child"> {{ getAge(child.birthDate) }} </mat-cell>
+    <mat-cell *matCellDef="let child"> {{ getAge(child.birthDate) }}</mat-cell>
   </ng-container>
 
   <!-- Birthdate Column -->
@@ -30,6 +35,16 @@
     <mat-header-cell *matHeaderCellDef> Geburtsdatum</mat-header-cell>
     <mat-cell *matCellDef="let child">
       {{ child.birthDate | date: 'longDate' }}
+    </mat-cell>
+  </ng-container>
+
+  <!-- Register Column -->
+  <ng-container matColumnDef="registerDate">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>
+      Registrierung</mat-header-cell
+    >
+    <mat-cell *matCellDef="let child">
+      {{ child.registerDate | date: 'longDate' }}
     </mat-cell>
   </ng-container>
 

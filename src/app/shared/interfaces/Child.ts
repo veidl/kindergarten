@@ -5,6 +5,7 @@ export interface Child {
   name: string;
   birthDate: string;
   kindergardenId: number;
+  registerDate: string;
 }
 
 export interface ChildResponse {
@@ -13,4 +14,5 @@ export interface ChildResponse {
   birthDate: string;
   kindergarden: Kindergarden;
   kindergardenId: number;
+  registerDate: string;
 }
