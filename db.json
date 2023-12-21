@@ -1,20 +1,6 @@
 {
   "childs": [
     {
-      "id": "_ij700m",
-      "name": "Z",
-      "birthDate": "2021-07-04",
-      "kindergardenId": 3,
-      "registerDate": "2020-07-04"
-    },
-    {
-      "name": "B",
-      "kindergardenId": 2,
-      "birthDate": "2023-10-26",
-      "id": "ip57WMS",
-      "registerDate": "2022-07-04"
-    },
-    {
       "name": "C",
       "kindergardenId": 3,
       "birthDate": "2023-11-15",
@@ -27,13 +13,6 @@
       "birthDate": "2023-11-22T23:00:00.000Z",
       "id": "Jgek8Nd",
       "registerDate": "2024-07-04"
-    },
-    {
-      "name": "test",
-      "kindergardenId": 3,
-      "birthDate": "2023-12-09T23:00:00.000Z",
-      "registerDate": "2023-12-21T15:54:16.775Z",
-      "id": "FG77N_8"
     }
   ],
   "kindergardens": [

@@ -39,20 +39,24 @@ export class DataComponent implements OnInit, AfterViewInit {
     'registerDate',
     'unregister',
   ];
+  private sortState: string | undefined;
+  private sortDirection: string | undefined;
+  selectedKindergartenId: number | undefined;
 
   ngOnInit(): void {
-    console.log(this.currentPage);
-    this.backendService.getChildren(this.currentPage, this.pageSize);
+    this.loadKindergartens();
   }
 
   ngAfterViewInit() {
     this.sort.sortChange.subscribe((sortState: Sort) => {
-      this.backendService.getChildren(
-        this.currentPage,
-        this.pageSize,
-        `${sortState.active},${sortState.direction}`
-      );
+      this.sortState = sortState.active;
+      this.sortDirection = sortState.direction;
+      this.loadKindergartens();
     });
+  }
+
+  filterByKindergarten() {
+    this.loadKindergartens();
   }
 
   getAge(birthDate: string) {
@@ -71,7 +75,7 @@ export class DataComponent implements OnInit, AfterViewInit {
     let pageSize = event.pageSize;
     this.selectPageEvent.emit(currentPage);
     this.selectPageSizeEvent.emit(pageSize);
-    this.backendService.getChildren(currentPage, pageSize);
+    this.loadKindergartens();
   }
 
   public cancelRegistration(childId: string) {
@@ -79,6 +83,20 @@ export class DataComponent implements OnInit, AfterViewInit {
       childId,
       this.currentPage,
       this.pageSize
+    );
+  }
+
+  private loadKindergartens() {
+    let sortString: string | undefined;
+    if (this.sortState && this.sortDirection) {
+      sortString = `${this.sortState},${this.sortDirection}`;
+    }
+
+    this.backendService.getChildren(
+      this.currentPage,
+      this.pageSize,
+      sortString,
+      this.selectedKindergartenId
     );
   }
 }

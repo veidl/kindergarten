@@ -31,16 +31,32 @@ export class BackendService {
       });
   }
 
-  public getChildren(page: number, size: number, sort?: string) {
+  public getChildren(
+    page: number,
+    size: number,
+    sort?: string,
+    kindergartenId?: number
+  ) {
     this.spinnerService.show();
-    let sortParam = sort
-      ? `&_sort=${sort.split(',')[0]}&_order=${sort.split(',')[1]}`
-      : '';
+    let queryParams = [`_page=${page}`, `_limit=${size}`];
+
+    if (kindergartenId) {
+      queryParams.push(`kindergardenId=${kindergartenId}`);
+    }
+
+    if (sort) {
+      const [sortField, sortOrder] = sort.split(',');
+      if (sortField && sortOrder) {
+        queryParams.push(`_sort=${sortField}`, `_order=${sortOrder}`);
+      }
+    }
+
+    const queryUrl = `http://localhost:5000/childs?_expand=kindergarden&${queryParams.join(
+      '&'
+    )}`;
+
     this.http
-      .get<ChildResponse[]>(
-        `http://localhost:5000/childs?_expand=kindergarden&_page=${page}&_limit=${size}${sortParam}`,
-        { observe: 'response' }
-      )
+      .get<ChildResponse[]>(queryUrl, { observe: 'response' })
       .subscribe({
         next: data => {
           this.storeService.children = data.body!;

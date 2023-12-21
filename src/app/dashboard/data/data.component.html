@@ -1,3 +1,15 @@
+<mat-form-field appearance="fill">
+  <mat-label>Filter</mat-label>
+  <mat-select
+    [(value)]="selectedKindergartenId"
+    (selectionChange)="filterByKindergarten()">
+    <mat-option value="">Alle Kindergärten</mat-option>
+    <mat-option *ngFor="let kg of storeService.kindergardens" [value]="kg.id">
+      {{ kg.name }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
 <mat-table
   [dataSource]="storeService.children"
   class="mat-elevation-z8"
@@ -11,8 +23,8 @@
   <!-- Kindergarden Column -->
   <ng-container matColumnDef="kindergarden">
     <mat-header-cell *matHeaderCellDef mat-sort-header
-      >Kindergarden</mat-header-cell
-    >
+      >Kindergarden
+    </mat-header-cell>
     <mat-cell *matCellDef="let child"> {{ child.kindergarden.name }}</mat-cell>
   </ng-container>
 
@@ -41,8 +53,8 @@
   <!-- Register Column -->
   <ng-container matColumnDef="registerDate">
     <mat-header-cell *matHeaderCellDef mat-sort-header>
-      Registrierung</mat-header-cell
-    >
+      Registrierung
+    </mat-header-cell>
     <mat-cell *matCellDef="let child">
       {{ child.registerDate | date: 'longDate' }}
     </mat-cell>
