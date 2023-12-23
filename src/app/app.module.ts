@@ -24,6 +24,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatSortModule } from '@angular/material/sort';
+import { KindergardenComponent } from './dashboard/kindergarden/kindergarden.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { MatSortModule } from '@angular/material/sort';
     ButtonComponent,
     PaginationPipe,
     SpinnerComponent,
+    KindergardenComponent,
   ],
   imports: [
     BrowserModule,

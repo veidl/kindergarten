@@ -1,0 +1,40 @@
+.kindergarten-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+  max-height: 90vh;
+  margin: 10px;
+  padding: 10px;
+}
+
+.kindergarten-card {
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+  margin: 10px;
+  width: 100%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.kindergarten-card-content {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.kindergarten-image-container {
+  flex: 0 0 auto;
+  margin-right: 10px;
+}
+
+.kindergarten-image {
+  max-width: 250px;
+  max-height: 250px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.kindergarten-details {
+  flex: 1;
+}
