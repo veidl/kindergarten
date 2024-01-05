@@ -1,6 +1,6 @@
 <div class="login-container">
   <mat-card class="login-card">
-    <mat-card-title>Ihr Kind anmelden!</mat-card-title>
+    <mat-card-header>Ihr Kind anmelden!</mat-card-header>
     <mat-card-content>
       <form [formGroup]="addChildForm" (ngSubmit)="onSubmit()">
         <mat-form-field appearance="fill">
@@ -25,7 +25,7 @@
             formControlName="birthDate" />
           <mat-error
             *ngIf="addChildForm.get('birthDate').errors?.dateBeforeToday">
-            Geburtsdatum ist ind der Zukunft
+            Geburtstag muss mindestens ein Jahr in der Vergangenheit liegen
           </mat-error>
 
           <mat-error

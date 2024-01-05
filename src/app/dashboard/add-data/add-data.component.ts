@@ -43,14 +43,15 @@ export class AddDataComponent implements OnInit {
 
   private beforeTodayValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0); // Reset time part for today's date
+      const todayNextYear = new Date();
+      todayNextYear.setDate(todayNextYear.getDate() - 1095);
+      todayNextYear.setHours(0, 0, 0, 0); // Reset time part for today's date
       const selectedDate = new Date(control.value);
 
       if (control.value === null) {
         return { noDateSelected: true };
       }
-      if (selectedDate >= today) {
+      if (selectedDate >= todayNextYear) {
         return { dateBeforeToday: true };
       }
       return null;
@@ -64,7 +65,16 @@ export class AddDataComponent implements OnInit {
         this.currentPage,
         this.pageSize
       );
+
       this.addChildForm.reset();
+      Object.keys(this.addChildForm.controls).forEach(key => {
+        let control = this.addChildForm.get(key);
+        control?.markAsPristine(); // Mark control as pristine
+        control?.markAsUntouched(); // Mark control as untouched
+        control?.updateValueAndValidity(); // Update the value and validation status
+        control.setErrors(null); // Clear previous errors
+      });
+      console.log(this.addChildForm);
     }
   }
 }
